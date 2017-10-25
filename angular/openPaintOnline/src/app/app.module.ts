@@ -12,17 +12,28 @@ import { ROUTES } from './app.routes';
 import { AuthService } from './auth/auth.service';
 import { CallbackComponent } from './callback/callback.component';
 
+import { PaintComponent } from './paint/paint.component';
+import { CanvasComponent } from './paint/canvas/canvas.component';
+
+import { FlexLayoutModule } from '@angular/flex-layout';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    CallbackComponent
+    CallbackComponent,
+    PaintComponent,
+    CanvasComponent
+   
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(ROUTES)
+     ,FlexLayoutModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
