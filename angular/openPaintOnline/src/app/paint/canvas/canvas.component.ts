@@ -23,10 +23,6 @@ export class CanvasComponent implements OnInit {
 
   public toggleDrawingMode(): void 
   {
-
-    if(this.lineBool === true)
-		this.toggleLineMode();
-	
 	  if(this.canvas.isDrawingMode)
 	  {
 		  this.drawingModeButton.innerHTML = "Drawing Mode: Off";
@@ -34,6 +30,8 @@ export class CanvasComponent implements OnInit {
 	  }
 	  else
 	  {
+      if(this.lineBool === true)
+        this.toggleLineMode();
 		  this.drawingModeButton.innerHTML = "Drawing Mode: On";
 		  this.canvas.isDrawingMode = true;
 	  }
@@ -41,22 +39,22 @@ export class CanvasComponent implements OnInit {
 
   public toggleSprayBrush(): void 
   {
-    //if the line tool is on, turn it off.
-	  if(this.lineBool === true)
-    this.toggleLineMode();
-    //
     if(this.sprayBool === false) //canvas.freeDrawingBrush === defaultBrush) //sprayBool === false
     {
       this.sprayBool = !this.sprayBool;
       this.sprayBrushButton.innerHTML = "Spray Mode: On";
   
+      //if the line tool is on, turn it off.
+      if(this.lineBool === true)
+        this.toggleLineMode();
+
       this.canvas.freeDrawingBrush = new fabric.SprayBrush(this.canvas);
       this.canvas.freeDrawingBrush.color = "rgb(150, 25, 20)";
       this.canvas.freeDrawingBrush.density = 28;
       this.canvas.freeDrawingBrush.width = 20;
   
       if(!this.canvas.isDrawingMode)
-      this.toggleDrawingMode();
+        this.toggleDrawingMode();
     }
     else
     {
