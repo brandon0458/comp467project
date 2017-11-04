@@ -9,7 +9,7 @@ export const AUTH_CONFIG: AuthConfig = {
 
 
   // development:
-  clientID: '59Ne2UImBaIJJkZ7QFVkZtZuAoMJ275x',
+   clientID: '59Ne2UImBaIJJkZ7QFVkZtZuAoMJ275x',
 
   // production:
   // clientID: 'VF03Snqryiyrpkue2rPOVyxRxdbVMhba',

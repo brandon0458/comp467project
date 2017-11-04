@@ -17,7 +17,7 @@ export class AuthService {
 
 
     // development:
-    redirectUri: 'http://localhost:4200/callback',
+     redirectUri: 'http://localhost:4200/callback',
     //  production:
     // redirectUri: 'http://ec2-54-153-76-219.us-west-1.compute.amazonaws.com/',
 
