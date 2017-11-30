@@ -291,6 +291,80 @@ export class CanvasComponent implements OnInit {
       this.canvas.off();
     }
   }
+  
+  public initializeCanvasForFilters(): void
+  {
+    // This method simply initializes all canvas pixels
+    // to be colored white.
+
+    var x = 0;
+    var y = 0;
+    var ourCanvas = document.getElementById("c");
+    var context = ourCanvas.getContext("2d");
+    var width = ourCanvas.getAttribute("width");
+    var height = ourCanvas.getAttribute("height");
+
+    context.fillStyle="#FFFFFF";
+    context.rect(x, y, width, height);
+    context.fill();
+
+    context.fillStyle="#000000"; 
+    // returning to default fillStyle
+  }
+
+
+  public grayscaleFilter(): void
+  {
+    var x = 0;
+    var y = 0;
+    var ourCanvas = document.getElementById("c");
+    var context = ourCanvas.getContext("2d");
+    var width = ourCanvas.getAttribute("width");
+    var height = ourCanvas.getAttribute("height");
+
+    var redChange = 0.30;
+    var greenChange = 0.59;
+    var blueChange = 0.11;
+
+    var imageData = context.getImageData(x, y, width, height);
+    var imageDataArray = imageData.data;
+
+    for (var i = 0; i < imageDataArray.length; i += 4)
+    {
+      var gray = 
+          (imageDataArray[i] * redChange)
+          + (imageDataArray[i + 1] * greenChange)
+          + (imageDataArray[i + 2] * blueChange);
+
+      imageDataArray[i] = gray;
+      imageDataArray[i + 1] = gray;
+      imageDataArray[i + 2] = gray;
+    }
+
+    context.putImageData(imageData, x, y);
+  }
+
+  public inversionFilter(): void
+  {
+    var x = 0;
+    var y = 0;
+    var ourCanvas = document.getElementById("c");
+    var context = ourCanvas.getContext("2d");
+    var width = ourCanvas.getAttribute("width");
+    var height = ourCanvas.getAttribute("height");
+
+    var imageData = context.getImageData(x, y, width, height);
+    var imageDataArray = imageData.data;
+
+    for (var i = 0; i < imageDataArray.length; i += 4)
+    {
+      imageDataArray[i] = 255 - imageDataArray[i];
+      imageDataArray[i + 1] = 255 - imageDataArray[i + 1];
+      imageDataArray[i + 2] = 255 - imageDataArray[i + 2];
+    }
+
+    context.putImageData(imageData, x, y);
+  }
 
   public clearCanvas(): void 
   {
@@ -314,5 +388,7 @@ export class CanvasComponent implements OnInit {
     this.rectBool = false;
     this.ellipseBool = false;
     this.canvas.freeDrawingBrush.color = "rgb(0, 200, 100)";
+    
+    initializeCanvasForFilters();
   }
 }
