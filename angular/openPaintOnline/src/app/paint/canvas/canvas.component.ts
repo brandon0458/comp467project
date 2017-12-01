@@ -291,6 +291,110 @@ export class CanvasComponent implements OnInit {
       this.canvas.off();
     }
   }
+  
+  // OCCASIONALLY, 
+  // artifacts are left over on the edges of objects after filtering.
+  // This is due to inherent inaccuracy within the fabricJS drawing mode.
+
+  public grayscaleFilter(): void
+  {
+	var canvas = this.canvas;
+	var url = canvas.toDataURL();
+	
+	var img = new Image();
+	img.src = url;
+	fabric.Image.fromURL(img.src, function(img)
+	{
+		img.filters.push(new fabric.Image.filters.Grayscale());
+		img.applyFilters(canvas.renderAll.bind(canvas));
+		
+		img.width = canvas.width;
+		img.height = canvas.height;
+		canvas.add(img);
+		canvas.bringToFront(img);
+		canvas.deactivateAll();
+		canvas.renderAll();
+		canvas.forEachObject(function(object){
+			object.selectable = false;
+		});
+	});
+	
+	
+  }
+
+  public inversionFilter(): void
+  {
+    var canvas = this.canvas;
+	var url = canvas.toDataURL();
+	
+	var img = new Image();
+	img.src = url;
+	fabric.Image.fromURL(img.src, function(img)
+	{
+		img.filters.push(new fabric.Image.filters.Invert());
+		img.applyFilters(canvas.renderAll.bind(canvas));
+		
+		img.width = canvas.width;
+		img.height = canvas.height;
+		canvas.add(img);
+		canvas.bringToFront(img);
+		canvas.deactivateAll();
+		canvas.renderAll();
+		canvas.forEachObject(function(object){
+			object.selectable = false;
+		});
+	});
+  }
+  
+  // Two more working filters, commented out to save button space.
+  
+  /*public brightnessFilter(): void
+  {
+    var canvas = this.canvas;
+	var url = canvas.toDataURL();
+	
+	var img = new Image();
+	img.src = url;
+	fabric.Image.fromURL(img.src, function(img)
+	{
+		img.filters.push(new fabric.Image.filters.Brightness({brightness: 200}));
+		img.applyFilters(canvas.renderAll.bind(canvas));
+		
+		img.width = canvas.width;
+		img.height = canvas.height;
+		canvas.add(img);
+		canvas.bringToFront(img);
+		canvas.deactivateAll();
+		canvas.renderAll();
+		canvas.forEachObject(function(object){
+			object.selectable = false;
+		});
+	});
+  }
+  
+  public pixelateFilter(): void
+  {
+    var canvas = this.canvas;
+	var url = canvas.toDataURL();
+	
+	var img = new Image();
+	img.src = url;
+	fabric.Image.fromURL(img.src, function(img)
+	{
+		img.filters.push(new fabric.Image.filters.Pixelate({blocksize: 8}));
+		img.applyFilters(canvas.renderAll.bind(canvas));
+		
+		img.width = canvas.width;
+		img.height = canvas.height;
+		canvas.add(img);
+		canvas.bringToFront(img);
+		canvas.deactivateAll();
+		canvas.renderAll();
+		canvas.forEachObject(function(object){
+			object.selectable = false;
+		});
+	});
+  }*/
 
   public clearCanvas(): void 
   {
