@@ -299,7 +299,7 @@ export class CanvasComponent implements OnInit {
 
     var x = 0;
     var y = 0;
-    var ourCanvas = document.getElementById("c");
+    var ourCanvas = <HTMLCanvasElement> document.getElementById("c");
     var context = ourCanvas.getContext("2d");
     var width = ourCanvas.getAttribute("width");
     var height = ourCanvas.getAttribute("height");
@@ -317,7 +317,7 @@ export class CanvasComponent implements OnInit {
   {
     var x = 0;
     var y = 0;
-    var ourCanvas = document.getElementById("c");
+    var ourCanvas = <HTMLCanvasElement> document.getElementById("c");
     var context = ourCanvas.getContext("2d");
     var width = ourCanvas.getAttribute("width");
     var height = ourCanvas.getAttribute("height");
@@ -348,7 +348,7 @@ export class CanvasComponent implements OnInit {
   {
     var x = 0;
     var y = 0;
-    var ourCanvas = document.getElementById("c");
+    var ourCanvas = <HTMLCanvasElement> document.getElementById("c");
     var context = ourCanvas.getContext("2d");
     var width = ourCanvas.getAttribute("width");
     var height = ourCanvas.getAttribute("height");
