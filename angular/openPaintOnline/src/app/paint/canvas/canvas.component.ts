@@ -389,6 +389,6 @@ export class CanvasComponent implements OnInit {
     this.ellipseBool = false;
     this.canvas.freeDrawingBrush.color = "rgb(0, 200, 100)";
     
-    initializeCanvasForFilters();
+    this.initializeCanvasForFilters();
   }
 }
