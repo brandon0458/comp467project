@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: palmTree-webapp
+Implementation-Version: alpha-2.0
+Built-By: skynet
+Implementation-Vendor-Id: palmTree
+Build-Jdk: 1.8.0_144
+Implementation-URL: http://projects.spring.io/spring-boot/palmTree-web
+ app/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+

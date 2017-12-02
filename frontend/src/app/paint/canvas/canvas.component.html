@@ -1,0 +1,30 @@
+<!-- <div class="canvas-wrap" fxLayout="row" fxLayoutAlign="center center">
+  <canvas fxFlexAlign="center" id="canvas" class="canvas" width="800" height="800" style="border: 1px solid #666;"></canvas>
+</div> -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <canvas id="c" width="1000" height="590" style="border:1px solid #ccc"></canvas> <br />
+	  <button id="drawingModeButton" (click)="toggleDrawingMode()">Drawing Mode: Off</button>
+	  <button id="sprayModeButton" (click)="toggleSprayBrush()">Spray Mode: Off</button>
+    <button id="lineToolButton" (click)="toggleLineMode()">Line Tool: Off</button>
+    <button id="rectToolButton" (click)="toggleRectMode()">Rect Tool: Off</button>
+    <button id="ellipseToolButton" (click)="toggleEllipseMode()">Ellipse Tool: Off</button>
+    <button id="clearButton" (click)="clearCanvas()">Clear the Canvas</button>
+    <button id="grayscaleFilterButton" (click)="grayscaleFilter()">Grayscale Filter</button>
+    <button id="inversionFilterButton" (click)="inversionFilter()">Inversion Filter</button>
+    <button id="brightnessFilterButton" (click)="brightnessFilter()">Brightness Filter</button>
+    <button id="pixelateFilterButton" (click)="pixelateFilter()">Pixelate Filter</button>
+    <button id="saveButton" (click)="postCanvas()">Save</button>
+    <button id="loadButton" (click)="getCanvas()">Load</button>
+    <div class="loading" >
+        <img  id="loadingIcon" src="assets/loading.svg" alt="loading" >
+    </div>
+
+  </body>
+</html>
+

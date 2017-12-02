@@ -1,0 +1,33 @@
+
+<h4 *ngIf="auth.isAuthenticated()">
+  <!--<h1>You are logged in!</h1>-->  
+
+
+
+<!-- <div>
+    You are logged in!<br>
+  
+    <br><button (click)= "onTestGet()">Test GET User Request</button>
+    <p><br>Response: {{getUser}}</p>
+  
+    <br><br><br>
+  
+    <p>Test POST User Request:
+      <input #box (keyup.enter)="onTestPost(box.value)">
+    </p>
+    <p>Response: {{postUser}}</p>
+
+  </div> -->
+
+
+
+  <div>
+  <app-paint></app-paint>
+  </div>
+
+
+    <!--<app-paint></app-paint>-->
+</h4>
+<h4 *ngIf="!auth.isAuthenticated()">
+  You are not logged in! Please <a (click)="auth.login()">Log In</a> to continue.
+</h4>
