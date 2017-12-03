@@ -36,6 +36,8 @@ export class CanvasComponent implements OnInit {
   private UNIVERSAL_COLOR;
   private colorPicker;
   private defaultColor;
+  private DEFAULT_BRUSH_SIZE;
+  private brushSizeEl;
   private textModeButton;
   private text;
   
@@ -135,6 +137,7 @@ export class CanvasComponent implements OnInit {
 
 		  this.drawingModeButton.innerHTML = "Drawing Mode: On";
 		  this.canvas.isDrawingMode = true;
+      //(G) have to add color to this and spray brush and brush size
 	  }
   }
 
@@ -576,10 +579,12 @@ export class CanvasComponent implements OnInit {
     this.drawingModeButton = document.getElementById("drawingModeButton");
     this.sprayBrushButton = fabric.document.getElementById("sprayModeButton");
     this.textModeButton = fabric.document.getElementById("textModeButton");
+    this.brushSizeEl = fabric.document.getElementById("brushSizeInput");
     this.defaultBrush = this.canvas.freeDrawingBrush;
     //default starting color is green.
     this.UNIVERSAL_COLOR  = new fabric.Color("#00cc00");
     this.defaultColor = "#"+UNIVERSAL_COLOR.toHex();
+    this.DEFAULT_BRUSH_SIZE = 1;
     //set up the color picker.
     window.addEventListener("load", this.setupColorPicker, false);
     
