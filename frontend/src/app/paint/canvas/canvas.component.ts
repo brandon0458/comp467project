@@ -32,6 +32,9 @@ export class CanvasComponent implements OnInit {
   private ellipseBool;
   private ellipse;
   private savedImage;
+  private UNIVERSAL_COLOR;
+  private colorPicker;
+  private defaultColor;
   
 
   getCanvas() 
@@ -192,7 +195,7 @@ export class CanvasComponent implements OnInit {
         
         this.line = new fabric.Line(points, 
         {
-          stroke: "rgb(0, 20, 250)",
+          stroke: "#"+UNIVERSAL_COLOR.toHex(),
           strokeWidth: "4",
           originX: "center",
           originY: "center"
@@ -260,7 +263,7 @@ export class CanvasComponent implements OnInit {
           fill: 'rgba(0,0,0,0)',
           width: 0,
           height: 0,
-          stroke: '#666',
+          stroke: "#"+UNIVERSAL_COLOR.toHex(),
           strokeWidth: 2,
           angle: 0
         });
@@ -336,7 +339,7 @@ export class CanvasComponent implements OnInit {
           ry: 0,
           originX: 'center',
           originY: 'center',
-          stroke: '#666',
+          stroke: "#"+UNIVERSAL_COLOR.toHex(),
           strokeWidth: 2,
         });
         this.ellipse.set("selectable", true);
@@ -481,6 +484,24 @@ export class CanvasComponent implements OnInit {
     //assuming the canvas context is not changed.
 	  this.canvas.clear();
   }
+  
+  function colorIsChanging(event)
+  {
+    UNIVERSAL_COLOR = new fabric.Color(event.target.value);
+    canvas.freeDrawingBrush.color = event.target.value;
+    //line.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
+    //rect.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
+    //ellipse.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
+  }
+
+  public setupColorPicker(): void
+  {
+     colorPicker = document.querySelector("#colorPicker");
+     colorPicker.value = defaultColor;
+     colorPicker.addEventListener("input", colorIsChanging, false);
+    //vv in case the default color picker of the system is text input.
+     colorPicker.select();
+  }
 
   constructor(private httpService: HttpService) { }
 
@@ -492,6 +513,12 @@ export class CanvasComponent implements OnInit {
     this.drawingModeButton = document.getElementById("drawingModeButton");
     this.sprayBrushButton = fabric.document.getElementById("sprayModeButton");
     this.defaultBrush = this.canvas.freeDrawingBrush;
+    //default starting color is green.
+    this.UNIVERSAL_COLOR  = new fabric.Color("#00cc00");
+    defaultColor = "#"+UNIVERSAL_COLOR.toHex();
+    //set up the color picker.
+    window.addEventListener("load", setupColorPicker, false);
+    
    
     this.sprayBool = false; 
     this.lineBool = false;
