@@ -182,6 +182,17 @@ export class CanvasComponent implements OnInit {
     {
       //activate textMode
       textBool = true;
+      
+      //turn off the other tools if they're on.
+      if(this.canvas.isDrawingMode)
+        this.toggleDrawingMode();
+      if(this.lineBool === true)
+        this.toggleLineMode();
+      if(this.rectBool === true)
+        this.toggleRectMode();
+      if(this.ellipseBool === true)
+       this.toggleEllipseMode();
+      
       textModeButton.innerHTML = "Text Mode: On";
       turnOnTextMode();
     }
