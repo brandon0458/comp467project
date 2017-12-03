@@ -137,6 +137,8 @@ export class CanvasComponent implements OnInit {
 
 		  this.drawingModeButton.innerHTML = "Drawing Mode: On";
 		  this.canvas.isDrawingMode = true;
+      this.canvas.freeDrawingBrush.color = "#"+UNIVERSAL_COLOR.toHex();
+      
       //(G) have to add color to this and spray brush and brush size
 	  }
   }
@@ -159,8 +161,8 @@ export class CanvasComponent implements OnInit {
          this.toggleTextMode();
 
       this.canvas.freeDrawingBrush = new fabric.SprayBrush(this.canvas);
-      this.canvas.freeDrawingBrush.color = "rgb(150, 25, 20)";
-      this.canvas.freeDrawingBrush.density = 28;
+      this.canvas.freeDrawingBrush.color = "#"+UNIVERSAL_COLOR.toHex();
+      this.canvas.freeDrawingBrush.density = 35; //28
       this.canvas.freeDrawingBrush.width = 20;
   
       if(!this.canvas.isDrawingMode)
@@ -229,69 +231,6 @@ export class CanvasComponent implements OnInit {
     });
   }
 
-  public toggleLineMode(): void 
-  {
-    if(this.lineBool === false) //if lineMode is off
-    {
-      this.lineBool = true;
-      this.canvas.selection = false;
-      document.getElementById("lineToolButton").innerHTML = "Line Tool: On";
-      if(this.canvas.isDrawingMode)
-        this.toggleDrawingMode();
-      if(this.rectBool === true)
-        this.toggleRectMode();
-      if(this.ellipseBool === true)
-       this.toggleEllipseMode();
-      if(this.textBool === true)
-       this.toggleTextMode();
-      var myCanvas = this.canvas;
-
-      this.canvas.on("mouse:down", function(options)
-      {
-        this.mouseIsDown = true;
-        //get the location of the mousedown event
-        var mouseDownLocation = myCanvas.getPointer(options.e);
-
-        //create an array of points to initialize the line on mousedown: origin and terminal points will be the location clicked.
-        var points = [ mouseDownLocation.x, mouseDownLocation.y, mouseDownLocation.x, mouseDownLocation.y ];
-        
-        this.line = new fabric.Line(points, 
-        {
-          stroke: "#"+UNIVERSAL_COLOR.toHex(),
-          strokeWidth: "4",
-          originX: "center",
-          originY: "center"
-        });
-        this.line.set("selectable", true);
-        myCanvas.add(this.line);
-      });
-      
-      this.canvas.on("mouse:move", function(options)
-      {
-        //mouse needs to have been down inside canvas, otherwise return
-        if(!this.mouseIsDown)
-          return;
-        var mouseDownLocation = myCanvas.getPointer(options.e);
-        this.line.set({x2:mouseDownLocation.x, y2:mouseDownLocation.y});
-        
-        myCanvas.renderAll();
-      });
-      
-      this.canvas.on("mouse:up", function(options)
-      {
-        this.mouseIsDown = false;
-      });
-    }
-    else //if lineMode is on, turn off
-    {
-      //alert("Line is ON, will turn OFF");
-      this.lineBool = false;
-      document.getElementById("lineToolButton").innerHTML = "Line Tool: Off";
-      this.canvas.selection = true;
-      //(!) Problem w/ this function. Doesn't turn off the mouseup/down methods. 
-      this.canvas.off();
-    }
-  }
 
   public toggleRectMode(): void 
   {
@@ -568,6 +507,15 @@ export class CanvasComponent implements OnInit {
     //vv in case the default color picker of the system is text input.
      colorPicker.select();
   }
+  
+  public setupBrushSize(): void
+  {
+    brushSizeEl.addEventListener("input", function()
+	  {
+		  canvas.freeDrawingBrush.width = parseInt(this.value, 10) || DEFAULT_BRUSH_SIZE;
+		  //this.previousSibling.innerHTML = this.value;
+	  }, false);
+  }
 
   constructor(private httpService: HttpService) { }
 
@@ -587,7 +535,7 @@ export class CanvasComponent implements OnInit {
     this.DEFAULT_BRUSH_SIZE = 1;
     //set up the color picker.
     window.addEventListener("load", this.setupColorPicker, false);
-    
+    window.addEventListener("load", this.setupBrushSize, false);
    
     this.sprayBool = false; 
     this.lineBool = false;
