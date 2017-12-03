@@ -230,7 +230,71 @@ export class CanvasComponent implements OnInit {
       text.enterEditing();
     });
   }
+  
+  public toggleLineMode(): void 
+  {
+    if(this.lineBool === false) //if lineMode is off
+    {
+      this.lineBool = true;
+      //selection
+      this.canvas.selection = false;
+      document.getElementById("lineToolButton").innerHTML = "Line Tool: On";
+      if(this.canvas.isDrawingMode)
+        this.toggleDrawingMode();
+      if(this.rectBool === true)
+        this.toggleRectMode();
+      if(this.ellipseBool === true)
+       this.toggleEllipseMode();
+      if(this.textBool === true)
+       this.toggleTextMode();
+      var myCanvas = this.canvas;
 
+      this.canvas.on("mouse:down", function(options)
+      {
+        this.mouseIsDown = true;
+        //get the location of the mousedown event
+        var mouseDownLocation = myCanvas.getPointer(options.e);
+
+        //create an array of points to initialize the line on mousedown: origin and terminal points will be the location clicked.
+        var points = [ mouseDownLocation.x, mouseDownLocation.y, mouseDownLocation.x, mouseDownLocation.y ];
+        
+        this.line = new fabric.Line(points, 
+        {
+          stroke: "#"+UNIVERSAL_COLOR.toHex(),
+          strokeWidth: "4",
+          originX: "center",
+          originY: "center"
+        });
+        this.line.set("selectable", true);
+        myCanvas.add(this.line);
+      });
+      
+      this.canvas.on("mouse:move", function(options)
+      {
+        //mouse needs to have been down inside canvas, otherwise return
+        if(!this.mouseIsDown)
+          return;
+        var mouseDownLocation = myCanvas.getPointer(options.e);
+        this.line.set({x2:mouseDownLocation.x, y2:mouseDownLocation.y});
+        
+        myCanvas.renderAll();
+      });
+      
+      this.canvas.on("mouse:up", function(options)
+      {
+        this.mouseIsDown = false;
+      });
+    }
+    else //if lineMode is on, turn off
+    {
+      //alert("Line is ON, will turn OFF");
+      this.lineBool = false;
+      document.getElementById("lineToolButton").innerHTML = "Line Tool: Off";
+      this.canvas.selection = true;
+      //(!) Problem w/ this function. Doesn't turn off the mouseup/down methods. 
+      this.canvas.off();
+    }
+  }
 
   public toggleRectMode(): void 
   {
