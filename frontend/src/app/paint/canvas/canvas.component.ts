@@ -81,15 +81,18 @@ export class CanvasComponent implements OnInit {
   public hideView(): void
   {
     document.getElementById('drawingModeButton').style.visibility='hidden';
+    document.getElementById('brushSizeInput').style.visibility='hidden';
     document.getElementById('sprayModeButton').style.visibility='hidden';
     document.getElementById('lineToolButton').style.visibility='hidden';
     document.getElementById('rectToolButton').style.visibility='hidden';
     document.getElementById('ellipseToolButton').style.visibility='hidden';
     document.getElementById('clearButton').style.visibility='hidden';
+    document.getElementById('colorPicker').style.visibility='hidden';
     document.getElementById('grayscaleFilterButton').style.visibility='hidden';
     document.getElementById('inversionFilterButton').style.visibility='hidden';
     document.getElementById('brightnessFilterButton').style.visibility='hidden';
     document.getElementById('pixelateFilterButton').style.visibility='hidden';
+    document.getElementById('textToolButton').style.visibility='hidden';
     document.getElementById('saveButton').style.visibility='hidden';
     document.getElementById('loadButton').style.visibility='hidden';
     document.getElementById('c').style.visibility='hidden';
@@ -98,15 +101,18 @@ export class CanvasComponent implements OnInit {
   public showView(): void
   {
     document.getElementById('drawingModeButton').style.visibility='visible';
+    document.getElementById('brushSizeInput').style.visibility='visible';
     document.getElementById('sprayModeButton').style.visibility='visible';
     document.getElementById('lineToolButton').style.visibility='visible';
     document.getElementById('rectToolButton').style.visibility='visible';
     document.getElementById('ellipseToolButton').style.visibility='visible';
     document.getElementById('clearButton').style.visibility='visible';
+    document.getElementById('colorPicker').style.visibility='visible';
     document.getElementById('grayscaleFilterButton').style.visibility='visible';
     document.getElementById('inversionFilterButton').style.visibility='visible';
     document.getElementById('brightnessFilterButton').style.visibility='visible';
     document.getElementById('pixelateFilterButton').style.visibility='visible';
+    document.getElementById('textToolButton').style.visibility='visible';
     document.getElementById('saveButton').style.visibility='visible';
     document.getElementById('loadButton').style.visibility='visible';
     document.getElementById('c').style.visibility='visible';
@@ -137,7 +143,7 @@ export class CanvasComponent implements OnInit {
 
 		  this.drawingModeButton.innerHTML = "Drawing Mode: On";
 		  this.canvas.isDrawingMode = true;
-      this.canvas.freeDrawingBrush.color = "#"+UNIVERSAL_COLOR.toHex();
+      this.canvas.freeDrawingBrush.color = "#"+this.UNIVERSAL_COLOR.toHex();
       
       //(G) have to add color to this and spray brush and brush size
 	  }
@@ -161,7 +167,7 @@ export class CanvasComponent implements OnInit {
          this.toggleTextMode();
 
       this.canvas.freeDrawingBrush = new fabric.SprayBrush(this.canvas);
-      this.canvas.freeDrawingBrush.color = "#"+UNIVERSAL_COLOR.toHex();
+      this.canvas.freeDrawingBrush.color = "#"+this.UNIVERSAL_COLOR.toHex();
       this.canvas.freeDrawingBrush.density = 35; //28
       this.canvas.freeDrawingBrush.width = 20;
   
@@ -183,10 +189,10 @@ export class CanvasComponent implements OnInit {
   
   public toggleTextMode(): void
   {
-    if(!textBool) //if it's not text mode...
+    if(this.textBool === false) //if it's not text mode...
     {
       //activate textMode
-      textBool = true;
+      this.textBool = true;
       
       //turn off the other tools if they're on.
       if(this.canvas.isDrawingMode)
@@ -198,7 +204,7 @@ export class CanvasComponent implements OnInit {
       if(this.ellipseBool === true)
        this.toggleEllipseMode();
       
-      textModeButton.innerHTML = "Text Mode: On";
+      this.textModeButton.innerHTML = "Text Mode: On";
       turnOnTextMode();
     }
     else //text mode is on
@@ -260,7 +266,7 @@ export class CanvasComponent implements OnInit {
         
         this.line = new fabric.Line(points, 
         {
-          stroke: "#"+UNIVERSAL_COLOR.toHex(),
+          stroke: "#"+this.UNIVERSAL_COLOR.toHex(),
           strokeWidth: "4",
           originX: "center",
           originY: "center"
@@ -330,7 +336,7 @@ export class CanvasComponent implements OnInit {
           fill: 'rgba(0,0,0,0)',
           width: 0,
           height: 0,
-          stroke: "#"+UNIVERSAL_COLOR.toHex(),
+          stroke: "#"+this.UNIVERSAL_COLOR.toHex(),
           strokeWidth: 2,
           angle: 0
         });
@@ -408,7 +414,7 @@ export class CanvasComponent implements OnInit {
           ry: 0,
           originX: 'center',
           originY: 'center',
-          stroke: "#"+UNIVERSAL_COLOR.toHex(),
+          stroke: "#"+this.UNIVERSAL_COLOR.toHex(),
           strokeWidth: 2,
         });
         this.ellipse.set("selectable", true);
@@ -556,8 +562,9 @@ export class CanvasComponent implements OnInit {
   
   function colorIsChanging(event)
   {
+    var myCanvas = this.canvas;
     this.UNIVERSAL_COLOR = new fabric.Color(event.target.value);
-    canvas.freeDrawingBrush.color = event.target.value;
+    this.canvas.freeDrawingBrush.color = event.target.value; 
     //line.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
     //rect.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
     //ellipse.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
@@ -565,18 +572,18 @@ export class CanvasComponent implements OnInit {
 
   public setupColorPicker(): void
   {
-     colorPicker = document.querySelector("#colorPicker");
-     colorPicker.value = defaultColor;
-     colorPicker.addEventListener("input", colorIsChanging, false);
+     this.colorPicker = document.querySelector("#colorPicker"); //(*)(!)
+     this.colorPicker.value = this.defaultColor;
+     this.colorPicker.addEventListener("input", colorIsChanging, false);
     //vv in case the default color picker of the system is text input.
-     colorPicker.select();
+     //colorPicker.select();
   }
   
   public setupBrushSize(): void
   {
     brushSizeEl.addEventListener("input", function()
 	  {
-		  canvas.freeDrawingBrush.width = parseInt(this.value, 10) || DEFAULT_BRUSH_SIZE;
+		  this.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || this.DEFAULT_BRUSH_SIZE;
 		  //this.previousSibling.innerHTML = this.value;
 	  }, false);
   }
@@ -595,7 +602,7 @@ export class CanvasComponent implements OnInit {
     this.defaultBrush = this.canvas.freeDrawingBrush;
     //default starting color is green.
     this.UNIVERSAL_COLOR  = new fabric.Color("#00cc00");
-    this.defaultColor = "#"+UNIVERSAL_COLOR.toHex();
+    this.defaultColor = "#"+this.UNIVERSAL_COLOR.toHex();
     this.DEFAULT_BRUSH_SIZE = 1;
     //set up the color picker.
     window.addEventListener("load", this.setupColorPicker, false);
