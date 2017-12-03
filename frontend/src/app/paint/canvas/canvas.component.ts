@@ -24,8 +24,9 @@ export class CanvasComponent implements OnInit {
   private sprayBrushButton;
   private defaultBrush;
   private sprayBool;
-  private lineBool;
+  private lineBool; 
   private rectBool;
+  private textBool;
   private rect;
   private startX;
   private startY;
@@ -35,6 +36,9 @@ export class CanvasComponent implements OnInit {
   private UNIVERSAL_COLOR;
   private colorPicker;
   private defaultColor;
+  private textModeButton;
+  private text;
+  
   
 
   getCanvas() 
@@ -126,6 +130,8 @@ export class CanvasComponent implements OnInit {
         this.toggleRectMode();
       if(this.ellipseBool === true)
         this.toggleEllipseMode();
+      if(this.textBool === true)
+        this.toggleTextMode();
 
 		  this.drawingModeButton.innerHTML = "Drawing Mode: On";
 		  this.canvas.isDrawingMode = true;
@@ -146,6 +152,8 @@ export class CanvasComponent implements OnInit {
         this.toggleRectMode();
        if(this.ellipseBool === true)
         this.toggleEllipseMode();
+       if(this.textBool === true)
+         this.toggleTextMode();
 
       this.canvas.freeDrawingBrush = new fabric.SprayBrush(this.canvas);
       this.canvas.freeDrawingBrush.color = "rgb(150, 25, 20)";
@@ -167,7 +175,45 @@ export class CanvasComponent implements OnInit {
       this.canvas.freeDrawingBrush = this.defaultBrush;
     }
   }
-
+  
+  public toggleTextMode(): void
+  {
+    if(!textBool) //if it's not text mode...
+    {
+      //activate textMode
+      textBool = true;
+      textModeButton.innerHTML = "Text Mode: On";
+      turnOnTextMode();
+    }
+    else //text mode is on
+    {
+      //turn it off.
+      textBool = false;
+      textModeButton.innerHTML = "Text Mode: Off";
+      canvas.selection = true;
+      //remove the event listener(s)
+      canvas.off();
+      text.exitEditing();
+      canvas.discardActiveObject();
+      canvas.requestRenderAll();
+    }
+    
+  }
+  
+  public turnOnTextMode(): void
+  {
+    canvas.on("mouse:down", function(options)
+    {
+      var coordinates = canvas.getPointer(options.e);
+    
+      text = new fabric.IText("", { left:coordinates.x, top:coordinates.y });
+      canvas.selection = false;
+      canvas.add(text);
+      canvas.setActiveObject(text);
+      //canvas.selectAll();
+      text.enterEditing();
+    });
+  }
 
   public toggleLineMode(): void 
   {
@@ -182,6 +228,8 @@ export class CanvasComponent implements OnInit {
         this.toggleRectMode();
       if(this.ellipseBool === true)
        this.toggleEllipseMode();
+      if(this.textBool === true)
+       this.toggleTextMode();
       var myCanvas = this.canvas;
 
       this.canvas.on("mouse:down", function(options)
@@ -244,6 +292,8 @@ export class CanvasComponent implements OnInit {
         this.toggleLineMode();
       if(this.ellipseBool === true)
         this.toggleEllipseMode();
+      if(this.textBool === true)
+        this.toggleTextMode();
         
       var myCanvas = this.canvas;
 
@@ -319,6 +369,8 @@ export class CanvasComponent implements OnInit {
         this.toggleLineMode();
       if(this.rectBool === true)
         this.toggleRectMode();
+      if(this.textBool === true)
+        this.toggleTextMode();      
         
       var myCanvas = this.canvas;
 
@@ -487,7 +539,7 @@ export class CanvasComponent implements OnInit {
   
   function colorIsChanging(event)
   {
-    UNIVERSAL_COLOR = new fabric.Color(event.target.value);
+    this.UNIVERSAL_COLOR = new fabric.Color(event.target.value);
     canvas.freeDrawingBrush.color = event.target.value;
     //line.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
     //rect.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
@@ -512,18 +564,20 @@ export class CanvasComponent implements OnInit {
     //canvas.isDrawingMode = true;
     this.drawingModeButton = document.getElementById("drawingModeButton");
     this.sprayBrushButton = fabric.document.getElementById("sprayModeButton");
+    this.textModeButton = fabric.document.getElementById("textModeButton");
     this.defaultBrush = this.canvas.freeDrawingBrush;
     //default starting color is green.
     this.UNIVERSAL_COLOR  = new fabric.Color("#00cc00");
-    defaultColor = "#"+UNIVERSAL_COLOR.toHex();
+    this.defaultColor = "#"+UNIVERSAL_COLOR.toHex();
     //set up the color picker.
-    window.addEventListener("load", setupColorPicker, false);
+    window.addEventListener("load", this.setupColorPicker, false);
     
    
     this.sprayBool = false; 
     this.lineBool = false;
     this.rectBool = false;
     this.ellipseBool = false;
-    this.canvas.freeDrawingBrush.color = "rgb(0, 200, 100)";
+    this.textBool = false;
+    this.canvas.freeDrawingBrush.color = "#"+this.UNIVERSAL_COLOR.toHex();
   }
 }
