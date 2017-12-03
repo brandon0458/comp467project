@@ -205,35 +205,35 @@ export class CanvasComponent implements OnInit {
        this.toggleEllipseMode();
       
       this.textModeButton.innerHTML = "Text Mode: On";
-      turnOnTextMode();
+      this.turnOnTextMode();
     }
     else //text mode is on
     {
       //turn it off.
-      textBool = false;
-      textModeButton.innerHTML = "Text Mode: Off";
-      canvas.selection = true;
+      this.textBool = false;
+      this.textModeButton.innerHTML = "Text Mode: Off";
+      this.canvas.selection = true;
       //remove the event listener(s)
-      canvas.off();
-      text.exitEditing();
-      canvas.discardActiveObject();
-      canvas.requestRenderAll();
+      this.canvas.off();
+      this.text.exitEditing();
+      this.canvas.discardActiveObject();
+      this.canvas.requestRenderAll();
     }
     
   }
   
   public turnOnTextMode(): void
   {
-    canvas.on("mouse:down", function(options)
+    this.canvas.on("mouse:down", function(options)
     {
-      var coordinates = canvas.getPointer(options.e);
+      var coordinates = this.canvas.getPointer(options.e);
     
-      text = new fabric.IText("", { left:coordinates.x, top:coordinates.y });
-      canvas.selection = false;
-      canvas.add(text);
-      canvas.setActiveObject(text);
+      this.text = new fabric.IText("", { left:coordinates.x, top:coordinates.y });
+      this.canvas.selection = false;
+      this.canvas.add(this.text);
+      this.canvas.setActiveObject(this.text);
       //canvas.selectAll();
-      text.enterEditing();
+      this.text.enterEditing();
     });
   }
   
@@ -560,7 +560,7 @@ export class CanvasComponent implements OnInit {
 	  this.canvas.clear();
   }
   
-  function colorIsChanging(event)
+  public colorIsChanging(event): void
   {
     var myCanvas = this.canvas;
     this.UNIVERSAL_COLOR = new fabric.Color(event.target.value);
@@ -574,14 +574,14 @@ export class CanvasComponent implements OnInit {
   {
      this.colorPicker = document.querySelector("#colorPicker"); //(*)(!)
      this.colorPicker.value = this.defaultColor;
-     this.colorPicker.addEventListener("input", colorIsChanging, false);
+     this.colorPicker.addEventListener("input", this.colorIsChanging, false);
     //vv in case the default color picker of the system is text input.
      //colorPicker.select();
   }
   
   public setupBrushSize(): void
   {
-    brushSizeEl.addEventListener("input", function()
+    this.brushSizeEl.addEventListener("input", function()
 	  {
 		  this.canvas.freeDrawingBrush.width = parseInt(this.value, 10) || this.DEFAULT_BRUSH_SIZE;
 		  //this.previousSibling.innerHTML = this.value;
