@@ -28,6 +28,10 @@
 
     <!--<app-paint></app-paint>-->
 </h4>
-<h4 *ngIf="!auth.isAuthenticated()">
-  You are not logged in! Please <a (click)="auth.login()">Log In</a> to continue.
+<h4 id="textbody" *ngIf="!auth.isAuthenticated()" style="text-align: center; margin: 35px auto;">
+    Welcome to OpenPaintOnline! Please <a (click)="auth.login()">Log In</a> to continue.
+  <body>
+      <img src="http://www.vapelab.com/wp-content/themes/vapelab/images/bg_home.jpg">
+    </body>
+  
 </h4>
