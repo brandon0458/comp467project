@@ -15,13 +15,13 @@
     <datalist id="brushSizeList">
       <select style="display: block;">
         <option value="default" ></option>
-        <option value="2" ></option>
-        <option value="4" ></option>
-        <option value="8" ></option>
-        <option value="12" ></option>
-        <option value="20" ></option>
-        <option value="40" ></option>
-        <option value="72" ></option>
+        <option value="2" >2</option>
+        <option value="4" >4</option>
+        <option value="8" >8</option>
+        <option value="12" >12</option>
+        <option value="20" >20</option>
+        <option value="40" >40</option> 
+        <option value="72" >72</option>
       </select>
     </datalist>
 	  <button id="sprayModeButton" (click)="toggleSprayBrush()">Spray Mode: Off</button>
@@ -29,12 +29,12 @@
     <button id="rectToolButton" (click)="toggleRectMode()">Rect Tool: Off</button>
     <button id="ellipseToolButton" (click)="toggleEllipseMode()">Ellipse Tool: Off</button>
     <button id="clearButton" (click)="clearCanvas()">Clear the Canvas</button> <br />
-    <input type="text" id="colorPicker" value="#00cc00">
+    <input type="color" id="colorPicker" value="#00cc00">
     <button id="grayscaleFilterButton" (click)="grayscaleFilter()">Grayscale Filter</button>
     <button id="inversionFilterButton" (click)="inversionFilter()">Inversion Filter</button>
     <button id="brightnessFilterButton" (click)="brightnessFilter()">Brightness Filter</button>
     <button id="pixelateFilterButton" (click)="pixelateFilter()">Pixelate Filter</button>
-    <button id="textToolButton" (click)="toggleTextTool()">Text Mode: Off"</button>
+    <button id="textModeButton" (click)="toggleTextMode()">Text Mode: Off</button>
     <button id="saveButton" (click)="postCanvas()">Save</button>
     <button id="loadButton" (click)="getCanvas()">Load</button>
     <div class="loading" >
@@ -43,4 +43,3 @@
 
   </body>
 </html>
-
