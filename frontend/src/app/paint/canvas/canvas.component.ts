@@ -94,7 +94,7 @@ export class CanvasComponent implements OnInit {
     document.getElementById('inversionFilterButton').style.visibility='hidden';
     document.getElementById('brightnessFilterButton').style.visibility='hidden';
     document.getElementById('pixelateFilterButton').style.visibility='hidden';
-    document.getElementById('textToolButton').style.visibility='hidden';
+    document.getElementById('textModeButton').style.visibility='hidden';
     document.getElementById('saveButton').style.visibility='hidden';
     document.getElementById('loadButton').style.visibility='hidden';
     document.getElementById('c').style.visibility='hidden';
@@ -114,7 +114,7 @@ export class CanvasComponent implements OnInit {
     document.getElementById('inversionFilterButton').style.visibility='visible';
     document.getElementById('brightnessFilterButton').style.visibility='visible';
     document.getElementById('pixelateFilterButton').style.visibility='visible';
-    document.getElementById('textToolButton').style.visibility='visible';
+    document.getElementById('textModeButton').style.visibility='visible';
     document.getElementById('saveButton').style.visibility='visible';
     document.getElementById('loadButton').style.visibility='visible';
     document.getElementById('c').style.visibility='visible';
@@ -620,11 +620,16 @@ export class CanvasComponent implements OnInit {
     //setup the brush size.
     this.brushSizeEl.addEventListener("input", ()=>
 	  {
-      console.log("**What is it?"+this.canvas.freeDrawingBrush);
 		  this.canvas.freeDrawingBrush.width = parseInt(this.brushSizeEl.value, 10) || this.DEFAULT_BRUSH_SIZE;
 		  //this.previousSibling.innerHTML = this.value;
 	  }, false);
-   
+    
+    this.brushSizeEl.addEventListener("change", ()=>
+	  {
+		  this.canvas.freeDrawingBrush.width = parseInt(this.brushSizeEl.value, 10) || this.DEFAULT_BRUSH_SIZE;
+		  //this.previousSibling.innerHTML = this.value;
+	  }, false);
+
     this.sprayBool = false; 
     this.lineBool = false;
     this.rectBool = false;
