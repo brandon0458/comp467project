@@ -3,6 +3,7 @@ import 'fabric';
 import { AsyncPipe } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { HttpService } from './../../http.service';
+import { Canvas } from 'fabric';
 
 declare let fabric; 
 
@@ -40,6 +41,7 @@ export class CanvasComponent implements OnInit {
   private brushSizeEl;
   private textModeButton;
   private text;
+
   
   
 
@@ -139,7 +141,7 @@ export class CanvasComponent implements OnInit {
       if(this.ellipseBool === true)
         this.toggleEllipseMode();
       if(this.textBool === true)
-        this.toggleTextMode();
+        this.toggleTextMode(this);
 
 		  this.drawingModeButton.innerHTML = "Drawing Mode: On";
 		  this.canvas.isDrawingMode = true;
@@ -164,7 +166,7 @@ export class CanvasComponent implements OnInit {
        if(this.ellipseBool === true)
         this.toggleEllipseMode();
        if(this.textBool === true)
-         this.toggleTextMode();
+         this.toggleTextMode(this);
 
       this.canvas.freeDrawingBrush = new fabric.SprayBrush(this.canvas);
       this.canvas.freeDrawingBrush.color = "#"+this.UNIVERSAL_COLOR.toHex();
@@ -187,13 +189,16 @@ export class CanvasComponent implements OnInit {
     }
   }
   
-  public toggleTextMode(): void
+  public toggleTextMode(mycontext): void
   {
+    var upperScopeThis = mycontext;
+
     if(this.textBool === false) //if it's not text mode...
     {
       //activate textMode
       this.textBool = true;
-      
+      //var ownCanvas = this.canvas;
+
       //turn off the other tools if they're on.
       if(this.canvas.isDrawingMode)
         this.toggleDrawingMode();
@@ -205,7 +210,7 @@ export class CanvasComponent implements OnInit {
        this.toggleEllipseMode();
       
       this.textModeButton.innerHTML = "Text Mode: On";
-      this.turnOnTextMode();
+      this.turnOnTextMode(); //.bind(this); //(!)(*)
     }
     else //text mode is on
     {
@@ -217,14 +222,13 @@ export class CanvasComponent implements OnInit {
       this.canvas.off();
       this.text.exitEditing();
       this.canvas.discardActiveObject();
-      this.canvas.requestRenderAll();
+      this.canvas.renderAll();
     }
-    
-  }
+  } 
   
   public turnOnTextMode(): void
   {
-    this.canvas.on("mouse:down", function(options)
+    this.canvas.on("mouse:down", (options) =>
     {
       var coordinates = this.canvas.getPointer(options.e);
     
@@ -252,10 +256,11 @@ export class CanvasComponent implements OnInit {
       if(this.ellipseBool === true)
        this.toggleEllipseMode();
       if(this.textBool === true)
-       this.toggleTextMode();
+       this.toggleTextMode(this);
       var myCanvas = this.canvas;
 
-      this.canvas.on("mouse:down", function(options)
+      //this.canvas.on("mouse:down", function(options)
+      this.canvas.on("mouse:down", (options) =>
       {
         this.mouseIsDown = true;
         //get the location of the mousedown event
@@ -275,7 +280,7 @@ export class CanvasComponent implements OnInit {
         myCanvas.add(this.line);
       });
       
-      this.canvas.on("mouse:move", function(options)
+      this.canvas.on("mouse:move", (options) =>
       {
         //mouse needs to have been down inside canvas, otherwise return
         if(!this.mouseIsDown)
@@ -286,7 +291,7 @@ export class CanvasComponent implements OnInit {
         myCanvas.renderAll();
       });
       
-      this.canvas.on("mouse:up", function(options)
+      this.canvas.on("mouse:up", (options) =>
       {
         this.mouseIsDown = false;
       });
@@ -316,11 +321,11 @@ export class CanvasComponent implements OnInit {
       if(this.ellipseBool === true)
         this.toggleEllipseMode();
       if(this.textBool === true)
-        this.toggleTextMode();
+        this.toggleTextMode(this);
         
       var myCanvas = this.canvas;
 
-      this.canvas.on("mouse:down", function(options)
+      this.canvas.on("mouse:down", (options) =>
       {
         this.mouseIsDown = true;
         //get the location of the mousedown event
@@ -344,7 +349,7 @@ export class CanvasComponent implements OnInit {
         myCanvas.add(this.rect);
       });
       
-      this.canvas.on("mouse:move", function(options)
+      this.canvas.on("mouse:move", (options) =>
       {
         //mouse needs to have been down inside canvas, otherwise return
         if(!this.mouseIsDown)
@@ -360,10 +365,10 @@ export class CanvasComponent implements OnInit {
         t = Math.min(this.startY, mouseDownLocation.y);
 
         this.rect.set({width:x, height:y, top:t, left:l});
-        myCanvas.renderAll();
+        myCanvas.reenderAll();
       });
       
-      this.canvas.on("mouse:up", function(options)
+      this.canvas.on("mouse:up", (options) =>
       {
         this.mouseIsDown = false;
       });
@@ -393,11 +398,11 @@ export class CanvasComponent implements OnInit {
       if(this.rectBool === true)
         this.toggleRectMode();
       if(this.textBool === true)
-        this.toggleTextMode();      
+        this.toggleTextMode(this);      
         
       var myCanvas = this.canvas;
 
-      this.canvas.on("mouse:down", function(options)
+      this.canvas.on("mouse:down", (options) =>
       {
         this.mouseIsDown = true;
         //get the location of the mousedown event
@@ -421,7 +426,7 @@ export class CanvasComponent implements OnInit {
         myCanvas.add(this.ellipse);
       });
       
-      this.canvas.on("mouse:move", function(options)
+      this.canvas.on("mouse:move", (options) =>
       {
         //mouse needs to have been down inside canvas, otherwise return
         if(!this.mouseIsDown)
@@ -434,7 +439,7 @@ export class CanvasComponent implements OnInit {
         myCanvas.renderAll();
       });
       
-      this.canvas.on("mouse:up", function(options)
+      this.canvas.on("mouse:up", (options) =>
       {
         this.mouseIsDown = false;
       });
@@ -560,20 +565,12 @@ export class CanvasComponent implements OnInit {
 	  this.canvas.clear();
   }
   
-  public colorIsChanging(event): void
-  {
-    var myCanvas = this.canvas;
-    this.UNIVERSAL_COLOR = new fabric.Color(event.target.value);
-    this.canvas.freeDrawingBrush.color = event.target.value; 
-    //line.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
-    //rect.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
-    //ellipse.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
-  }
 
+/*
   public setupColorPicker(): void
   {
      this.colorPicker = document.querySelector("#colorPicker"); //(*)(!)
-     this.colorPicker.value = this.defaultColor;
+     this.colorPicker.value = "#"+this.UNIVERSAL_COLOR.toHex();//this.defaultColor;
      this.colorPicker.addEventListener("input", this.colorIsChanging, false);
     //vv in case the default color picker of the system is text input.
      //colorPicker.select();
@@ -587,6 +584,7 @@ export class CanvasComponent implements OnInit {
 		  //this.previousSibling.innerHTML = this.value;
 	  }, false);
   }
+*/
 
   constructor(private httpService: HttpService) { }
 
@@ -597,16 +595,35 @@ export class CanvasComponent implements OnInit {
     //canvas.isDrawingMode = true;
     this.drawingModeButton = document.getElementById("drawingModeButton");
     this.sprayBrushButton = fabric.document.getElementById("sprayModeButton");
-    this.textModeButton = fabric.document.getElementById("textModeButton");
+    this.textModeButton = document.getElementById("textModeButton");
     this.brushSizeEl = fabric.document.getElementById("brushSizeInput");
     this.defaultBrush = this.canvas.freeDrawingBrush;
+
+    this.toggleDrawingMode.bind(this);
+    var toggleTextMode = this.toggleTextMode.bind(this);
+    //this.toggleLineMode.bind(this.canvas);
     //default starting color is green.
     this.UNIVERSAL_COLOR  = new fabric.Color("#00cc00");
-    this.defaultColor = "#"+this.UNIVERSAL_COLOR.toHex();
     this.DEFAULT_BRUSH_SIZE = 1;
     //set up the color picker.
-    window.addEventListener("load", this.setupColorPicker, false);
-    window.addEventListener("load", this.setupBrushSize, false);
+    this.colorPicker = document.querySelector("#colorPicker"); //(*)(!)
+    this.colorPicker.value = "#"+this.UNIVERSAL_COLOR.toHex();//this.defaultColor;
+    this.colorPicker.addEventListener("input",   (event)=>
+    {
+      var myCanvas = this.canvas;
+      this.UNIVERSAL_COLOR = new fabric.Color(event.target.value);
+      myCanvas.freeDrawingBrush.color = event.target.value; 
+      //line.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
+      //rect.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
+      //ellipse.set("stroke", "#"+UNIVERSAL_COLOR.toHex());
+    }, false);
+    //setup the brush size.
+    this.brushSizeEl.addEventListener("input", ()=>
+	  {
+      console.log("**What is it?"+this.canvas.freeDrawingBrush);
+		  this.canvas.freeDrawingBrush.width = parseInt(this.brushSizeEl.value, 10) || this.DEFAULT_BRUSH_SIZE;
+		  //this.previousSibling.innerHTML = this.value;
+	  }, false);
    
     this.sprayBool = false; 
     this.lineBool = false;
