@@ -9,7 +9,7 @@
   </head>
   <body>
     <canvas id="c" width="1000" height="590" style="border:1px solid #ccc"></canvas> <br />
-	  <button id="drawingModeButton" (click)="toggleDrawingMode()">Drawing Mode: Off</button>
+    <button id="drawingModeButton" (click)="toggleDrawingMode()">Drawing Mode: Off</button>
     <label for="brushSizeInput">Brush Size:</label>
     <input type="text" name="color" id="brushSizeInput" value="default" placeholder="default" size="10" list="brushSizeList" />
     <datalist id="brushSizeList">
@@ -24,10 +24,12 @@
         <option value="72" >72</option>
       </select>
     </datalist>
-	  <button id="sprayModeButton" (click)="toggleSprayBrush()">Spray Mode: Off</button>
+    <button id="sprayModeButton" (click)="toggleSprayBrush()">Spray Mode: Off</button>
     <button id="lineToolButton" (click)="toggleLineMode()">Line Tool: Off</button>
     <button id="rectToolButton" (click)="toggleRectMode()">Rect Tool: Off</button>
     <button id="ellipseToolButton" (click)="toggleEllipseMode()">Ellipse Tool: Off</button>
+    <button id="circleToolButton" (click)="toggleCircleMode()">Circle Tool: Off</button>
+    <button id="triangleToolButton" (click)="toggleTriangleMode()">Triangle Tool: Off</button>
     <button id="clearButton" (click)="clearCanvas()">Clear the Canvas</button> <br />
     <input type="color" id="colorPicker" value="#00cc00">
     <button id="grayscaleFilterButton" (click)="grayscaleFilter()">Grayscale Filter</button>

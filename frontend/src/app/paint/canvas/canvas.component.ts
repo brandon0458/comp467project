@@ -28,7 +28,11 @@ export class CanvasComponent implements OnInit {
   private lineBool; 
   private rectBool;
   private textBool;
+  private circleBool;
+  private triangleBool;  
   private rect;
+  private circle;
+  private triangle;
   private startX;
   private startY;
   private ellipseBool;
@@ -88,6 +92,7 @@ export class CanvasComponent implements OnInit {
     document.getElementById('lineToolButton').style.visibility='hidden';
     document.getElementById('rectToolButton').style.visibility='hidden';
     document.getElementById('ellipseToolButton').style.visibility='hidden';
+    document.getElementById('triangleToolButton').style.visibility='hidden';
     document.getElementById('clearButton').style.visibility='hidden';
     document.getElementById('colorPicker').style.visibility='hidden';
     document.getElementById('grayscaleFilterButton').style.visibility='hidden';
@@ -108,6 +113,7 @@ export class CanvasComponent implements OnInit {
     document.getElementById('lineToolButton').style.visibility='visible';
     document.getElementById('rectToolButton').style.visibility='visible';
     document.getElementById('ellipseToolButton').style.visibility='visible';
+    document.getElementById('triangleToolButton').style.visibility='visible';
     document.getElementById('clearButton').style.visibility='visible';
     document.getElementById('colorPicker').style.visibility='visible';
     document.getElementById('grayscaleFilterButton').style.visibility='visible';
@@ -125,15 +131,15 @@ export class CanvasComponent implements OnInit {
 
   public toggleDrawingMode(): void 
   {
-	  if(this.canvas.isDrawingMode)
-	  {
-		  this.drawingModeButton.innerHTML = "Drawing Mode: Off";
+    if(this.canvas.isDrawingMode)
+	{
+      this.drawingModeButton.innerHTML = "Drawing Mode: Off";
       this.canvas.isDrawingMode = false;
       if(this.sprayBool === true)
         this.toggleSprayBrush();
-	  }
-	  else
-	  {
+	}
+    else
+    {
       if(this.lineBool === true)
         this.toggleLineMode();
       if(this.rectBool === true)
@@ -142,13 +148,17 @@ export class CanvasComponent implements OnInit {
         this.toggleEllipseMode();
       if(this.textBool === true)
         this.toggleTextMode(this);
+      if(this.circleBool === true)
+        this.toggleCircleMode();
+      if(this.triangleBool === true)
+        this.toggleTriangleMode();
 
-		  this.drawingModeButton.innerHTML = "Drawing Mode: On";
-		  this.canvas.isDrawingMode = true;
+	  this.drawingModeButton.innerHTML = "Drawing Mode: On";
+      this.canvas.isDrawingMode = true;
       this.canvas.freeDrawingBrush.color = "#"+this.UNIVERSAL_COLOR.toHex();
       
       //(G) have to add color to this and spray brush and brush size
-	  }
+	}
   }
 
   public toggleSprayBrush(): void 
@@ -161,12 +171,16 @@ export class CanvasComponent implements OnInit {
       //if the line tool is on, turn it off.
       if(this.lineBool === true)
         this.toggleLineMode();
-        if(this.rectBool === true)
+      if(this.rectBool === true)
         this.toggleRectMode();
-       if(this.ellipseBool === true)
+      if(this.ellipseBool === true)
         this.toggleEllipseMode();
-       if(this.textBool === true)
-         this.toggleTextMode(this);
+      if(this.textBool === true)
+        this.toggleTextMode(this);
+      if(this.circleBool === true)
+        this.toggleCircleMode();
+      if(this.triangleBool === true)
+        this.toggleTriangleMode();
 
       this.canvas.freeDrawingBrush = new fabric.SprayBrush(this.canvas);
       this.canvas.freeDrawingBrush.color = "#"+this.UNIVERSAL_COLOR.toHex();
@@ -207,7 +221,11 @@ export class CanvasComponent implements OnInit {
       if(this.rectBool === true)
         this.toggleRectMode();
       if(this.ellipseBool === true)
-       this.toggleEllipseMode();
+        this.toggleEllipseMode();
+      if(this.circleBool === true)
+        this.toggleCircleMode();
+      if(this.triangleBool === true)
+        this.toggleTriangleMode();
       
       this.textModeButton.innerHTML = "Text Mode: On";
       this.turnOnTextMode(); //.bind(this); //(!)(*)
@@ -254,9 +272,13 @@ export class CanvasComponent implements OnInit {
       if(this.rectBool === true)
         this.toggleRectMode();
       if(this.ellipseBool === true)
-       this.toggleEllipseMode();
+        this.toggleEllipseMode();
       if(this.textBool === true)
-       this.toggleTextMode(this);
+        this.toggleTextMode(this);
+      if(this.circleBool === true)
+        this.toggleCircleMode();
+      if(this.triangleBool === true)
+        this.toggleTriangleMode();
       var myCanvas = this.canvas;
 
       //this.canvas.on("mouse:down", function(options)
@@ -322,6 +344,10 @@ export class CanvasComponent implements OnInit {
         this.toggleEllipseMode();
       if(this.textBool === true)
         this.toggleTextMode(this);
+      if(this.circleBool === true)
+        this.toggleCircleMode();
+      if(this.triangleBool === true)
+        this.toggleTriangleMode();
         
       var myCanvas = this.canvas;
 
@@ -365,7 +391,7 @@ export class CanvasComponent implements OnInit {
         t = Math.min(this.startY, mouseDownLocation.y);
 
         this.rect.set({width:x, height:y, top:t, left:l});
-        myCanvas.reenderAll();
+        myCanvas.renderAll();
       });
       
       this.canvas.on("mouse:up", (options) =>
@@ -398,7 +424,11 @@ export class CanvasComponent implements OnInit {
       if(this.rectBool === true)
         this.toggleRectMode();
       if(this.textBool === true)
-        this.toggleTextMode(this);      
+        this.toggleTextMode(this);
+      if(this.circleBool === true)
+        this.toggleCircleMode();
+      if(this.triangleBool === true)
+        this.toggleTriangleMode();
         
       var myCanvas = this.canvas;
 
@@ -446,9 +476,163 @@ export class CanvasComponent implements OnInit {
     }
     else //if ellipseMode is on, turn off
     {
-      //alert("Rect is ON, will turn OFF");
+      //alert("Ellipse is ON, will turn OFF");
       this.ellipseBool = false;
       document.getElementById("ellipseToolButton").innerHTML = "Ellipse Tool: Off";
+      this.canvas.selection = true;
+      //(!) Problem w/ this function. Doesn't turn off the mouseup/down methods. 
+      this.canvas.off();
+    }
+  }
+  
+  public toggleTriangleMode(): void 
+  {
+    if(this.triangleBool === false) //if triangleMode is off
+    {
+      this.triangleBool = true;
+      this.canvas.selection = false;
+      document.getElementById("triangleToolButton").innerHTML = "Triangle Tool: On";
+      if(this.canvas.isDrawingMode)
+        this.toggleDrawingMode();
+      if(this.lineBool === true)
+        this.toggleLineMode();
+      if(this.ellipseBool === true)
+        this.toggleEllipseMode();
+      if(this.textBool === true)
+        this.toggleTextMode(this);
+      if(this.circleBool === true)
+        this.toggleCircleMode();
+      if(this.rectBool === true)
+        this.toggleRectMode();
+        
+      var myCanvas = this.canvas;
+
+      this.canvas.on("mouse:down", (options) =>
+      {
+        this.mouseIsDown = true;
+        //get the location of the mousedown event
+        var mouseDownLocation = myCanvas.getPointer(options.e);
+
+        //create an array of points to initialize the line on mousedown: origin and terminal points will be the location clicked.
+        this.startX = mouseDownLocation.x;
+        this.startY = mouseDownLocation.y;
+        this.triangle = new fabric.Triangle( 
+        {
+          left: mouseDownLocation.x,
+          top: mouseDownLocation.y,
+          fill: 'rgba(0,0,0,0)',
+          width: 1,
+          height: 1,
+          stroke: "#"+this.UNIVERSAL_COLOR.toHex(),
+          strokeWidth: 2
+        });
+        this.triangle.set("selectable", true);
+        myCanvas.add(this.triangle);
+      });
+      
+      this.canvas.on("mouse:move", (options) =>
+      {
+        //mouse needs to have been down inside canvas, otherwise return
+        if(!this.mouseIsDown)
+          return;
+        
+        var x, y, l, t;
+        var mouseDownLocation = myCanvas.getPointer(options.e);
+       
+        x = Math.abs(mouseDownLocation.x - this.startX);
+        y = Math.abs(mouseDownLocation.y - this.startY);
+        
+        l = Math.min(this.startX, mouseDownLocation.x);
+        t = Math.min(this.startY, mouseDownLocation.y);
+
+        this.triangle.set({width:x, height:y, top:t, left:l});
+        myCanvas.renderAll();
+      });
+      
+      this.canvas.on("mouse:up", (options) =>
+      {
+        this.mouseIsDown = false;
+      });
+    }
+    else //if triangleMode is on, turn off
+    {
+      //alert("Triangle is ON, will turn OFF");
+      this.triangleBool = false;
+      document.getElementById("triangleToolButton").innerHTML = "Triangle Tool: Off";
+      this.canvas.selection = true;
+      //(!) Problem w/ this function. Doesn't turn off the mouseup/down methods. 
+      this.canvas.off();
+    }
+  }
+
+  public toggleCircleMode(): void 
+  {
+    if(this.circleBool === false) //if circleMode is off
+    {
+      this.circleBool = true;
+      this.canvas.selection = false;
+      document.getElementById("circleToolButton").innerHTML = "Circle Tool: On";
+      if(this.canvas.isDrawingMode)
+        this.toggleDrawingMode();
+      if(this.lineBool === true)
+        this.toggleLineMode();
+      if(this.rectBool === true)
+        this.toggleRectMode();
+      if(this.textBool === true)
+        this.toggleTextMode(this);
+      if(this.ellipseBool === true)
+        this.toggleEllipseMode();
+      if(this.triangleBool === true)
+        this.toggleTriangleMode();
+        
+      var myCanvas = this.canvas;
+
+      this.canvas.on("mouse:down", (options) =>
+      {
+        this.mouseIsDown = true;
+        //get the location of the mousedown event
+        var mouseDownLocation = myCanvas.getPointer(options.e);
+
+        this.startX = mouseDownLocation.x;
+        this.startY = mouseDownLocation.y;
+        this.circle = new fabric.Circle( 
+        {
+          left: mouseDownLocation.x,
+          top: mouseDownLocation.y,
+          fill: 'rgba(0,0,0,0)',
+          radius: 0,
+          stroke: "#"+this.UNIVERSAL_COLOR.toHex(),
+          strokeWidth: 2,
+        });
+        this.circle.set("selectable", true);
+        myCanvas.add(this.circle);
+      });
+      
+      this.canvas.on("mouse:move", (options) =>
+      {
+        //mouse needs to have been down inside canvas, otherwise return
+        if(!this.mouseIsDown)
+          return;
+        
+        var mouseDownLocation = myCanvas.getPointer(options.e);
+        var x, y;
+        x = Math.min(this.startX, mouseDownLocation.x);
+        y = Math.min(this.startY, mouseDownLocation.y);
+
+        this.circle.set({left:x, top:y, radius: Math.max(Math.abs(this.startX - mouseDownLocation.x), Math.abs(this.startY - mouseDownLocation.y)) / 2 });
+        myCanvas.renderAll();
+      });
+      
+      this.canvas.on("mouse:up", (options) =>
+      {
+        this.mouseIsDown = false;
+      });
+    }
+    else //if circleMode is on, turn off
+    {
+      //alert("Circle is ON, will turn OFF");
+      this.circleBool = false;
+      document.getElementById("circleToolButton").innerHTML = "Circle Tool: Off";
       this.canvas.selection = true;
       //(!) Problem w/ this function. Doesn't turn off the mouseup/down methods. 
       this.canvas.off();
@@ -634,6 +818,8 @@ export class CanvasComponent implements OnInit {
     this.lineBool = false;
     this.rectBool = false;
     this.ellipseBool = false;
+    this.circleBool = false;
+    this.triangleBool = false;
     this.textBool = false;
     this.canvas.freeDrawingBrush.color = "#"+this.UNIVERSAL_COLOR.toHex();
   }
