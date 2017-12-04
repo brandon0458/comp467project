@@ -92,6 +92,7 @@ export class CanvasComponent implements OnInit {
     document.getElementById('lineToolButton').style.visibility='hidden';
     document.getElementById('rectToolButton').style.visibility='hidden';
     document.getElementById('ellipseToolButton').style.visibility='hidden';
+    document.getElementById('circleToolButton').style.visibility='hidden';
     document.getElementById('triangleToolButton').style.visibility='hidden';
     document.getElementById('clearButton').style.visibility='hidden';
     document.getElementById('colorPicker').style.visibility='hidden';
@@ -113,6 +114,7 @@ export class CanvasComponent implements OnInit {
     document.getElementById('lineToolButton').style.visibility='visible';
     document.getElementById('rectToolButton').style.visibility='visible';
     document.getElementById('ellipseToolButton').style.visibility='visible';
+    document.getElementById('circleToolButton').style.visibility='visible';
     document.getElementById('triangleToolButton').style.visibility='visible';
     document.getElementById('clearButton').style.visibility='visible';
     document.getElementById('colorPicker').style.visibility='visible';
